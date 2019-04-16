@@ -1,0 +1,207 @@
+attach(wc.at)
+
+# Package "Lattice" is used for dotplot graph
+library("lattice") 
+dotplot(wc.at$Waist, main="Dot Plot of Waist Circumferences")
+dotplot(wc.at$AT, main="Dot Plot of Adipose Tissue Areas")
+
+# BoxPlot
+boxplot(wc.at$Waist,col="dodgerblue4",main="Waist")
+boxplot(wc.at$AT,col="dodgerblue4",main="Adipose Tissue")
+
+
+#Linear Regression Model 
+model<-lm(AT~ Waist ,data=wc.at)
+summary(model)
+anova(model)
+
+#Confidence Intervals for the slopes
+confint(model,level=0.95)
+
+# Confidence Interval for avearge "AT" for new observation,waist circumference=100
+predict(model,newdata=data.frame(Waist=c(100,115)),interval="confidence",level=0.95)
+
+
+
+# Prediction Interval for new observation,waist circumference=100
+predict(model,newdata= data.frame(Waist=c(100,115)),interval="predict",level=0.95)
+
+
+#ScatterPlot of "Waist VS AT"
+
+plot(Waist,AT,main="Line of Best Fit - With Intercept", col="Dodgerblue4", col.main="Dodgerblue4", col.lab="Dodgerblue4", xlab="Waist", ylab="AT", pch=20)
+abline(model, col="red")
+segments(Waist, AT, Waist,predict(model))
+
+
+# "par(mfrow)"command is used To plot the graphs in 2*2 matrix form
+
+#The below "Plot" command gives four graphs like residual V fitted , Normal QQ Plot,...
+par(mfrow=c(2,2))
+plot(model)
+
+# Residuals 
+residuals=resid(model)
+
+# Boxplot of Residuals 
+boxplot(residuals,col="dodgerblue4",main="Residuals")
+
+
+# To get the Residuals Vs regressors Plots
+# Install the package called "car" and load it.
+library(car)
+residualPlots(model)
+
+
+# Also,below is the code geneartes the same plots as the "ResidualsPLots"
+plot(Waist,residuals,main="AT ~ W Model",ylab="Residuals",xlab="Waist")
+
+
+
+
+
+# Square root and Log Transformation of depedent variable
+attach(wc.at)
+att=sqrt(AT)
+logat=log(AT)
+wc=data.frame(att,wc.at,logat)
+
+attach(wc)
+
+# Regression Model with sqrt(AT) as the dependent variable
+
+model2<-lm(att~ Waist ,data=wc)
+summary(model2)
+
+#Confidence Intervals for the slopes
+confint(model2,level=0.95)
+
+
+# Confidence Interval for avearge "AT" for new observation,waist circumference=100,115
+predict(model2,newdata=data.frame(Waist=c(100,115)),interval="confidence",level=0.95)
+
+
+# Prediction Interval for new observation,waist circumference=100
+predict(model2,newdata= data.frame(Waist=c(100,115)),interval="predict",level=0.95)
+
+
+#The below "Plot" command gives four graphs like residual V fitted , Normal QQ Plot,...
+par(mfrow=c(2,2))
+plot(model2)
+
+
+# Residuals 
+residuals2=resid(model2)
+
+# Boxplot of Residuals 
+boxplot(residuals2,col="dodgerblue4",main="Residuals of SQRT(AT)")
+
+
+# To get the Residuals Vs regressors Plots
+# Install the package called "car" and load it.
+library(car)
+residualPlots(model2)
+
+
+# Also,below is the code geneartes the same plots as the "ResidualsPLots"
+plot(Waist,residuals2,main="SQRT(AT) ~ W Model",ylab="Residuals",xlab="Waist")
+
+
+#Scatter Plot of SQRT(AT) and Waist
+plot(wc$Waist,wc$att,main="Scatter Plot - Waist VS Sqrt(AT) ", col="Dodgerblue4", col.main="Dodgerblue4", col.lab="Dodgerblue4", xlab="Waist Ciscumference", ylab="Adipose Tissue area", pch=20)
+
+
+
+
+
+
+
+# Regression Model with log(AT) as the dependent variable
+
+model3<-lm(logat~ Waist ,data=wc)
+summary(model3)
+
+
+#Confidence Intervals for the slopes
+confint(model3,level=0.95)
+
+
+# Confidence Interval for avearge "AT" for new observation,waist circumference=100,115
+predict(model3,newdata=data.frame(Waist=c(100,115)),interval="confidence",level=0.95)
+
+
+# Prediction Interval for new observation,waist circumference=100,115
+predict(model3,newdata= data.frame(Waist=c(100,115)),interval="predict",level=0.95)
+
+
+#Scatter Plot of "Waist VS Log(AT)"
+plot(wc$Waist,wc$logat,main="Scatter Plot - Waist VS Log(AT) ", col="Dodgerblue4", col.main="Dodgerblue4", col.lab="Dodgerblue4", xlab="Waist Ciscumference", ylab="Adipose Tissue area", pch=20)      
+
+
+#The below "Plot" command gives four graphs like residual V fitted , Normal QQ Plot,...
+plot(model3)
+
+# Residuals 
+residuals3=resid(model3)
+
+# Boxplot of Residuals 
+boxplot(residuals3,col="dodgerblue4",main="Residuals of LOG(AT)")
+
+
+# To get the Residuals Vs regressors Plots
+# Install the package called "car" and load it.
+library(car)
+residualPlots(model3)
+
+# Also,below is the code geneartes the same plots as the "ResidualsPLots"
+plot(Waist,residuals3,main="LOG(AT) ~ W Model",ylab="Residuals",xlab="Waist")
+
+
+
+
+
+
+# adding the square term of Waist in the dataset
+
+attach(wc)
+ws=Waist * Waist
+wss=data.frame(wc,ws)
+
+# Regression Model of LOG(AT)  with Waist and Waist squre term
+model4<-lm(logat~ Waist + ws ,data=wss)
+summary(model4)
+
+
+#The below "Plot" command gives four graphs like residual V fitted , Normal QQ Plot,...
+par(mfrow=c(2,2))
+plot(model4)
+
+
+par(mfrow=c(1,1))
+
+# Residuals 
+residuals4=resid(model4)
+
+# Boxplot of Residuals 
+boxplot(residuals4,col="dodgerblue4",main="Residuals of LOG(AT) ~ w + WS")
+
+
+# To get the Residuals Vs regressors Plots
+# Install the package called "car" and load it.
+library(car)
+residualPlots(model4)
+
+# Also,below is the code geneartes the same plots as the "ResidualsPLots"
+plot(Waist,residuals4,main="LOG(AT) ~ W + Ws Model",ylab="Residuals",xlab="Waist")
+plot(ws,residuals4,main="LOG(AT) ~ W + Ws Model",ylab="Residuals",xlab="Waist Square")
+
+
+
+
+
+#Regression and ScatterPlot Without Intercept
+
+reg.model<-lm(AT~ Waist-1,data=wc.at)
+plot(Waist,AT,main="Line of Best Fit - Without Intercept", col="Dodgerblue4", col.main="Dodgerblue4", col.lab="Dodgerblue4", xlab="Waist", ylab="AT", pch=20)
+abline(reg.model, col="red")
+segments(Waist, AT, Waist,predict(reg.model))
