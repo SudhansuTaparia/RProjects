@@ -1,0 +1,51 @@
+library('quadprog')
+
+#Input (for example from slides)
+#
+corr       <- matrix(c(1,0.2199,0.0366,0.2199,1,-0.0545,0.0366,-0.0545,1),3,3)
+mu         <- c(.1073,.0737,.0627)
+sigma      <- c(.1667,.1055,.034)
+#Calculate covariance
+sigIsigJ   <- sigma %*% t(sigma) 
+cov        <- sigIsigJ*corr
+
+#Alternatively you can provide the covariance directly
+#cov        <- matrix(c(0.02778,0.00387,0.00021,0.00387,0.01112,-0.00020,0.00021,-0.00020,0.00115),3,3)
+
+
+#Define the QP
+#
+# The quadprog package needs to be installed and loaded before solve.QP is run
+# use: install.packages("quadprog") and then library("quadprog")
+# 
+
+R <- 0.09
+
+D    <- 2*cov
+d    <- c(0,0,0)
+A    <- matrix( c(1,1,1,-1,-1,-1, mu , -mu , 1,0,0,0,1,0,0,0,1 ),3,7)
+b0   <- c(1,-1,R,-R,0,0,0)
+
+varP=vector()
+sigmaP=vector()
+w1=vector()
+w2=vector()
+w3=vector()
+Rs=seq(0.065,0.10,.001);
+
+for (i in 1:length(Rs)) {
+  R   <- Rs[i]
+  b0   <- c(1,-1,R,-R,0,0,0)
+  
+  qpSol=solve.QP(D,d,A,b0)
+  
+  varP[i] = qpSol$value
+  sigmaP[i] = sqrt(varP[i])
+  w1[i]=qpSol$solution[1]
+  w2[i]=qpSol$solution[2]
+  w3[i]=qpSol$solution[3]
+  
+  
+}
+
+
