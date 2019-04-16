@@ -1,0 +1,37 @@
+#*****************************************************************
+# Simulating a single stock price
+#******************************************************************  
+p0 = 8323
+T = 116/260        #no of years to run simulation
+# mu_f =     # risk free rate
+mu = 0.1038     #expected returns per year
+sigma =  0.2484   #volatility per year
+N = 1000
+dt= 1/260         #no of periods per year
+
+
+Periods=T/dt
+SimulatedPrices=matrix(NA,Periods,N)
+
+muInt=mu*dt
+sigmaInt=sigma*sqrt(dt)
+
+
+SimulatedPrices=matrix(NA,Periods,N)
+prices = rep(NA,Periods)
+
+
+for(i in 1:N){
+  returns=rnorm(Periods,muInt,sigmaInt)
+  prices=s0*cumprod(returns+1)
+  SimulatedPrices[,i]=prices  
+}
+
+
+
+
+#plotting
+#matplot(SimulatedPrices,,"l")
+
+#Calc probability of being greater than 120
+#prob=mean(SimulatedPrices[260,]>120)

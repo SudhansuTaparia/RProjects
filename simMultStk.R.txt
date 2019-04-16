@@ -1,0 +1,30 @@
+#*****************************************************************
+# Simulating multiple stock prices
+#******************************************************************  
+s0     = c(100,100,100)
+T = 1         #no of years to run simulation
+mu =  c(.1073,.0737,.0627)      #expected returns per year
+cov = matrix(c(0.02778,0.00387,0.00021,0.00387,0.01112,-0.00020,0.00021,-0.00020,0.00115),3,3)   #volatility per year
+dt= 1/260         #no of periods per year
+nStks=length(s0)
+
+
+w=c(0.5,0.3,0.2)
+
+N=10000
+Periods=T/dt
+priceMat=matrix(NA,Periods,nStks)
+
+muInt=mu*dt
+covInt=cov*dt
+
+balance<-vector()
+for(i in 1:N){
+  returns=muInt+matrix(rnorm(Periods*nStks,0,1),Periods,nStks) %*% chol(covInt)
+  priceMat=s0*apply(returns+1,2,cumprod)
+  balance[i]=sum(priceMat[Periods,]*w)
+}
+
+#plotting one realization of the stock prices
+#matplot(priceMat,,"l")
+
