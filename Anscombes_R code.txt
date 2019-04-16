@@ -1,0 +1,31 @@
+Read the data
+
+attach(AnscombesQuarter)
+
+# Scatter Plot of x1 vs y1
+
+plot(x1,y1,col="black",main="Scatter Plot of x1 vs y1")
+ m4=lm(y1 ~ x1)
+ abline(m1, col="red")
+
+
+# Scatter Plot of x2 vs y2
+
+plot(x2,y2,col="black",main="Scatter Plot of x2 vs y2")
+ m4=lm(y2 ~ x2)
+ abline(m2, col="red")
+
+
+
+# Scatter Plot of x3 vs y3
+
+plot(x3,y3,col="black",main="Scatter Plot of x3 vs y3")
+ m4=lm(y3 ~ x3)
+ abline(m3, col="red")
+
+
+# Scatter Plot of x4 vs y4
+
+plot(x4,y4,col="black",main="Scatter Plot of x4 vs y4")
+ m4=lm(y4 ~ x4)
+ abline(m4, col="red")
