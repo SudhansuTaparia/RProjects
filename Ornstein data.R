@@ -1,0 +1,30 @@
+
+setwd("D:/LKD_NPCI_CRASHED DATA 29 NOV 2016/D Drive/My Desktop/ISB 30 Nov Apt Form/STUDY ISB FOR ALL RESIDENCIES1/SA 3/Data Sets")
+ornstein=read.table("ornsteindata.txt", header = TRUE)
+ornstein2=ornstein[,-1]
+dim(ornstein2)
+ornlm=lm(intrlcks~.,data=ornstein2)
+str(ornstein2)
+summary(ornlm)
+ornglm=glm(intrlcks~.,family = "poisson", data = ornstein2)
+summary(ornglm)
+with(ornglm,cbind(res.deviance=deviance,df=df.residual,p=pchisq(deviance,df.residual,lower.tail = FALSE)))
+par(mfrow=c(2,2))                                                         
+plot(ornglm)
+par(mfrow=c(1,1))
+plot(ornglm)
+k2=predict(ornglm,type="response")
+write.csv(k2,"predict_ornstein.csv")
+
+# R code for negative binomial model
+setwd("D:/LKD_NPCI_CRASHED DATA 29 NOV 2016/D Drive/My Desktop/ISB 30 Nov Apt Form/STUDY ISB FOR ALL RESIDENCIES1/SA 3/Data Sets")
+ornstein=read.table("ornsteindata.txt", header = TRUE)
+ornstein2=ornstein[,-1]
+require(ggplot2)
+require(foreign)
+require(MASS)
+ornbglm=glm.nb(intrlcks~.,data=ornstein2)
+summary(ornbglm)
+par(mfrow=c(2,2))
+plot(ornbglm)
+par(mfrow=c(1,1))

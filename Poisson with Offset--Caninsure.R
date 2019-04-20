@@ -1,0 +1,10 @@
+
+setwd("D:/LKD_NPCI_CRASHED DATA 29 NOV 2016/D Drive/My Desktop/ISB 30 Nov Apt Form/STUDY ISB FOR ALL RESIDENCIES1/SA 3/Data Sets")
+caninsure=read.table("canautoins.txt",header = TRUE)
+attach(caninsure)
+str(caninsure)
+merit=as.factor(Merit)
+class=as.factor(Class)
+caninsure2=data.frame(caninsure,merit,class)
+caninsglm=glm(Claims~merit+class+Premium+Cost,family="poisson",data=caninsure2,offset=log(Insured))
+summary(caninsglm)
